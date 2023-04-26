@@ -1,31 +1,91 @@
 {
   "name": "DevContainer",
+  // 포트번호: 443 HTTPS, 80 HTTP
 
+  // 컨테이너 기본 이미지 설정
   "build": {
-    // 컨테이너 기본 이미지 설정
+    "dockerfile": "./Dockerfile",
+    "context": ".",
+    "args": {
+      "VARIANT": "7.0"
+    }
   },
 
   "forwardPorts": [
     // 포트 포워딩
+    // 포트열어달라. 설정!
+    3000, 5000, 5001, 8080, 44380
   ],
 
+
+// 추가 기능
   "features": {
-    // 추가 기능
-  },
+    // 추가 기능, 딕셔너리라 순서 상관없이 설치됨
+    // Azure CLI
+    "ghcr.io/devcontainers/features/azure-cli:latest": {
+      "version": "latest"
+    },
+
+    // GitHub CLI
+    "ghcr.io/devcontainers/features/github-cli:latest": {
+      "version": "latest"
+    },
+
+    // node.js
+    "ghcr.io/devcontainers/features/node:latest": {
+      "version": "lts",
+      "nodeGypDependencies": true,
+      "nvmInstallPath": "/usr/local/share/nvm"
+    },
+
+    // common utilities
+    "ghcr.io/devcontainers/features/common-utils:latest": {
+      "installZsh": true,
+      "installOhMyZsh": true,
+      "upgradePackages": true,
+      "username": "vscode",
+      "uid": "1000",
+      "gid": "1000"
+    }
+  }
+,
 
   "overrideFeatureInstallOrder": [
     // 추가 기능 설치 순서
+    // 위의 features 설치 순서를 지정해주고 싶을때 사용.
+
+    "ghcr.io/devcontainers/features/common-utils"
+
   ],
 
+  // 이 프로젝트에 필요한 extension 등을 명시적으로 설치해줘야 함.
+  // vscode와 연동되어있지만, 그래도 반드시 명시해야함. 공통적으로 환경을 맞춰야 하므로.
+  // extension 링크에 나오는 extension 공식 명칭을 여기에 복사하기
   "customizations": {
     "vscode": {
       // 코드스페이스 커스터마이징
       "extensions": [
         // VS Code 익스텐션
+
+        // GitHub 코파일럿 관련
+        "GitHub.copilot",
+        "GitHub.copilot-labs",
+
+        // C# 관련
+        "ms-dotnettools.vscode-dotnet-pack",
+        "kreativ-software.csharpextensions",
+
+        // Azure 관련
+        "ms-vscode.vscode-node-azure-pack",
+        "ms-azuretools.vscode-bicep"
       ],
 
       "settings": {
         // VS Code 환경 설정
+        // 다크 테마, 미니맵 등 설정 통일 가능
+
+        "editor.minimap.enabled": true,
+        "explorer.sortOrder": "type" // explorer가 파일 정렬할때 확장자 순 정렬? 파일 이름 순 정렬?
       }
     }
   },
